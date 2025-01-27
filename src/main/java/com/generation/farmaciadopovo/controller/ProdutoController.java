@@ -62,9 +62,9 @@ public class ProdutoController {
 	@ResponseStatus(HttpStatus.NO_CONTENT) // Deleta um produto pelo seu ID.
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		Optional<Produto> tema = produtoRepository.findById(id);
+		Optional<Produto> produto = produtoRepository.findById(id);
 
-		if (tema.isEmpty())
+		if (produto.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
 		produtoRepository.deleteById(id);
