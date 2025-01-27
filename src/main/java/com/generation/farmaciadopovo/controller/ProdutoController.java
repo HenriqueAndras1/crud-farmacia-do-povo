@@ -43,7 +43,7 @@ public class ProdutoController {
 	}
 
 	@GetMapping("/nomeproduto/{nomeproduto}") // Busca os produtos pelo que existe no cadastro
-	public ResponseEntity<List<Produto>> getByTipo(@PathVariable String nomeproduto) {
+	public ResponseEntity<List<Produto>> getByNomeproduto(@PathVariable String nomeproduto) {
 		return ResponseEntity.ok(produtoRepository.findAllByNomeprodutoContainingIgnoreCase(nomeproduto));
 	}
 
