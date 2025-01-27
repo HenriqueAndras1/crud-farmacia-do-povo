@@ -27,51 +27,46 @@ import jakarta.validation.Valid;
 @RequestMapping("/categorias")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
-	
+
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
-	@GetMapping
-	public ResponseEntity<List<Categoria>> getAll(){
-        return ResponseEntity.ok(categoriaRepository.findAll());
-    }
-	
-	@GetMapping("/{id}")
-    public ResponseEntity<Categoria> getById(@PathVariable Long id){
-        return categoriaRepository.findById(id)
-            .map(resposta -> ResponseEntity.ok(resposta))
-            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
-	
-	 @GetMapping("/tipo/{tipo}")
-	    public ResponseEntity<List<Categoria>> getByTipo(@PathVariable 
-	    String tipo){
-	        return ResponseEntity.ok(categoriaRepository
-	            .findAllByTipoContainingIgnoreCase(tipo));
-	    }
-	 
-	 @PostMapping
-	    public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria){
-	        return ResponseEntity.status(HttpStatus.CREATED)
-	                .body(categoriaRepository.save(categoria));
-	    }
-	 
-	 @PutMapping
-	    public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria){
-	        return categoriaRepository.findById(categoria.getId())
-	            .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
-	            .body(categoriaRepository.save(categoria)))
-	            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-	    }
-	 
-	 @ResponseStatus(HttpStatus.NO_CONTENT)
-	    @DeleteMapping("/{id}")
-	    public void delete(@PathVariable Long id) {
-	        Optional<Categoria> tema = categoriaRepository.findById(id);
-	        
-	        if(tema.isEmpty())
-	            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-	        
-	        categoriaRepository.deleteById(id);              
-	    }
+
+	@GetMapping // Nesse metodo vou buscas todas as categorias.
+	public ResponseEntity<List<Categoria>> getAll() {
+		return ResponseEntity.ok(categoriaRepository.findAll());
+	}
+
+	@GetMapping("/{id}") // Aqui vou encontrar a categoria por ID
+	public ResponseEntity<Categoria> getById(@PathVariable Long id) {
+		return categoriaRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+
+	@GetMapping("/tipo/{tipo}") // Faz a busca da categoria pelo seu tipo de categoria.
+	public ResponseEntity<List<Categoria>> getByTipo(@PathVariable String tipo) {
+		return ResponseEntity.ok(categoriaRepository.findAllByTipoContainingIgnoreCase(tipo));
+	}
+
+	@PostMapping // Faz o cadastro dos tipos da categoria.
+	public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaRepository.save(categoria));
+	}
+
+	@PutMapping // Atualiza as informações de tipo ou descrição.
+	public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria) {
+		return categoriaRepository.findById(categoria.getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(categoriaRepository.save(categoria)))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+
+	@ResponseStatus(HttpStatus.NO_CONTENT) // Deleta uma categoria pelo ID.
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
+		Optional<Categoria> tema = categoriaRepository.findById(id);
+
+		if (tema.isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+		categoriaRepository.deleteById(id);
+	}
 }
